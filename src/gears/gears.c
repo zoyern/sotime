@@ -13,53 +13,53 @@
 #include <sotime/all.h>
 #include <stdio.h>
 
-void	updating_time(t_solib *solib, int passed)
+void	updating_time(t_soloop *loop, int passed)
 {
 	t_sotimer	*box;
 
-	if (!solib || !solib->time || solib->time->stop)
+	if (!loop || !loop->solib || loop->stop)
 		return ;
-	solib->time->current = sotime_get_millis();
-	solib->time->millis = solib->time->current - solib->time->starting_time;
-	box = solib->time->timers->first;
+	loop->current = sotime_get_millis();
+	loop->millis = loop->current - loop->starting_time;
+	box = loop->timers->first;
 	while (box->next)
 	{
-		sotime_update_timer(solib, box, passed);
+		sotime_update_timer(loop, box, passed);
 		box = box->next;
 	}
 }
 
-void	sotime_restart_loop(t_solib *solib)
+void	sotime_restart_loop(t_soloop *loop)
 {
-	solib->time->stop = 0;
-	solib->time->starting_time = sotime_get_millis();
+	loop->stop = 0;
+	loop->starting_time = sotime_get_millis();
 }
 
-int	sotime_loop(t_solib *solib, long millis, void *data, int (*callback)())
+int	sotime_loop(t_soloop *loop, long millis, void *data, int (*callback)())
 {
 	long	current;
 	long	start;
 	int		passed;
 
-	if (!solib || !solib->time)
+	if (!loop || !loop->solib)
 		return (1);
-	sotime_restart_loop(solib);
+	sotime_restart_loop(loop);
 	start = -millis;
 	current = millis;
 	passed = 0;
-	while (!solib->time->stop)
+	while (!loop->stop)
 	{
 		passed = 0;
 		if (current >= millis)
 		{
 			passed = 1;
 			if (callback)
-				if (callback(solib, data, solib->time->millis))
+				if (callback(loop, data, loop->millis))
 					return (1);
-			start = solib->time->millis;
+			start = loop->millis;
 		}
-		current = solib->time->millis - start;
-		updating_time(solib, passed);
+		current = loop->millis - start;
+		updating_time(loop, passed);
 	}
 	return (0);
 }

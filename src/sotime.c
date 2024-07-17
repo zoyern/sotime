@@ -14,7 +14,6 @@
 
 int	sotime_close(t_solib *solib, int status)
 {
-	solib->time->stop = 1;
 	if (!solib)
 	{
 		free(solib->time);
@@ -27,16 +26,27 @@ int	sotime_close(t_solib *solib, int status)
 	return (status);
 }
 
+t_soloop	*soloop_init(t_solib *solib)
+{
+	t_soloop	*loop;
+
+	loop = (t_soloop *)solib->malloc(solib, sizeof(t_soloop));
+	loop->solib = solib;
+	loop->starting_time = 0;
+	loop->millis = 0;
+	loop->stop = 1;
+	loop->timers = sonew_timers_list(solib);
+	loop->current = 0;
+	loop->get_millis = sotime_get_millis;
+	loop->update = updating_time;
+	loop->print = solib->print;
+	return (loop);
+}
+
 void	sotime_init(t_sotime *sotime)
 {
-	sotime->starting_time = 0;
-	sotime->millis = 0;
-	sotime->stop = 1;
-	sotime->timers = NULL;
-	sotime->current = sotime->starting_time;
-	sotime->loop = sotime_loop;
-	sotime->get_millis = sotime_get_millis;
-	sotime->update = updating_time;
+	sotime->loop = soloop_init;
+	sotime->start = sotime_loop;
 	sotime->close = sotime_close;
 }
 
@@ -51,10 +61,7 @@ t_solib	*sonew_time(t_solib *solib)
 	if (!solib->libft)
 		solib->close(solib, EXIT_FAILURE);
 	sotime = (t_sotime *)solib->malloc(solib, sizeof(t_sotime));
-	if (!sotime)
-		solib->close(solib, EXIT_FAILURE);
 	sotime_init(sotime);
 	solib->time = sotime;
-	sonew_timers_list(solib);
 	return (solib);
 }

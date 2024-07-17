@@ -22,6 +22,7 @@
 typedef struct s_sotime			t_sotime;
 typedef struct s_sotimer		t_sotimer;
 typedef struct s_sotimers_list	t_sotimers_list;
+typedef struct s_soloop			t_soloop;
 
 typedef struct s_sotimer
 {
@@ -37,22 +38,29 @@ typedef struct s_sotimer
 typedef struct s_sotimers_list
 {
 	t_sotimer	*first;
-	t_sotimer	*(*new)(t_solib *solib, int start, long millis);
+	t_sotimer	*(*new)(t_soloop *loop, int start, long millis);
 	void		(*reset)(t_sotimer *timer, int start);
-	void		(*clear)(t_solib *solib);
+	void		(*clear)(t_soloop *loop);
 }	t_sotimers_list;
 
-typedef struct s_sotime
+typedef struct s_soloop
 {
 	int				stop;
+	t_solib			*solib;
+	t_sotimers_list	*timers;
 	long			starting_time;
 	long			current;
 	long			millis;
-	t_sotimers_list	*timers;
-	int				(*loop)(t_solib *solib, long millis,
-			void *data, int (*callback)());
 	long			(*get_millis)();
-	void			(*update)(t_solib *solib, int passed);
+	void			(*update)(t_soloop *loop, int passed);
+	int				(*print)(const char *str, ...);
+}	t_soloop;
+
+typedef struct s_sotime
+{
+	t_soloop		*(*loop)(t_solib *solib);
+	int				(*start)(t_soloop *loop, long millis,
+			void *data, int (*callback)());
 	int				(*close)(t_solib *solib, int state);
 }	t_sotime;
 

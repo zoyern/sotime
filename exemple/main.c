@@ -12,34 +12,36 @@
 
 #include "exemple.h"
 
-int	my_update(t_solib *solib, t_data *data, long time)
+int	my_update(t_soloop *loop, t_data *data, long time)
 {
 	if (!time)
 	{
 		data->dying->start = 1;
-		data->eat->start = solib->print("%d -- eat\n", time);
+		data->eat->start = loop->print("%d -- eat\n", time);
 	}
 	if (data->eat->finish)
-		data->think->start = solib->print("%d -- think\n", time);
+		data->think->start = loop->print("%d -- think\n", time);
 	if (data->think->finish)
-		data->sleep->start = solib->print("%d -- sleep\n", time);
+		data->sleep->start = loop->print("%d -- sleep\n", time);
 	if (data->sleep->finish)
-		data->eat->start = solib->print("%d -- eat\n", time);
+		data->eat->start = loop->print("%d -- eat\n", time);
 	if (data->dying->finish)
-		solib->time->stop = 1;
+		loop->stop = 1;
 	return (0);
 }
 
 int	core(t_solib *solib)
 {
-	t_data	*data;
+	t_data		*data;
+	t_soloop	*loop;
 
+	loop = solib->time->loop(solib);
 	data = solib->malloc(solib, sizeof(t_data));
-	data->eat = solib->time->timers->new(solib, 0, 500);
-	data->think = solib->time->timers->new(solib, 0, 500);
-	data->sleep = solib->time->timers->new(solib, 0, 500);
-	data->dying = solib->time->timers->new(solib, 0, 5000);
-	solib->time->loop(solib, 1, data, my_update);
+	data->eat = loop->timers->new(loop, 0, 500);
+	data->think = loop->timers->new(loop, 0, 500);
+	data->sleep = loop->timers->new(loop, 0, 500);
+	data->dying = loop->timers->new(loop, 0, 5000);
+	solib->time->start(loop, 1, data, my_update);
 	return (0);
 }
 

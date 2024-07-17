@@ -12,19 +12,19 @@
 
 #include <sotime/all.h>
 
-t_sotimer	*timer_list_add(t_solib *solib, int start, long millis)
+t_sotimer	*timer_list_add(t_soloop *loop, int start, long millis)
 {
 	t_sotimer	*timer;
 
-	timer = solib->malloc(solib, sizeof(t_sotimer));
+	timer = loop->solib->malloc(loop->solib, sizeof(t_sotimer));
 	timer->start = start;
 	timer->millis = 0;
 	timer->start_millis = 0;
 	timer->working = 0;
 	timer->finish = 0;
 	timer->time = millis;
-	timer->next = solib->time->timers->first;
-	solib->time->timers->first = timer;
+	timer->next = loop->timers->first;
+	loop->timers->first = timer;
 	return (timer);
 }
 
@@ -37,45 +37,44 @@ void	timer_reset(t_sotimer *timer, int start)
 	timer->finish = 0;
 }
 
-void	timer_list_clear(t_solib *solib)
+void	timer_list_clear(t_soloop *loop)
 {
 	t_sotimer	*box;
 	t_sotimer	*tmp;
 
-	if (!solib->time || !solib->time->timers)
+	if (!loop || !loop->timers)
 		return ;
-	box = solib->time->timers->first;
+	box = loop->timers->first;
 	while (box)
 	{
 		tmp = box->next;
-		solib->free(solib, box);
+		loop->solib->free(loop->solib, box);
 		box = tmp;
 	}
-	solib->free(solib, solib->time->timers);
-	solib->time->timers = NULL;
+	loop->solib->free(loop->solib, loop->timers);
+	loop->timers = NULL;
 }
 
-void	sonew_timers_list(t_solib *solib)
+t_sotimers_list	*sonew_timers_list(t_solib *solib)
 {
-	if (!solib)
-		return ;
-	if (solib->time->timers)
-		timer_list_clear(solib);
-	solib->time->timers = solib->malloc(solib, sizeof(t_sotimers_list));
-	solib->time->timers->first = solib->malloc(solib, sizeof(t_sotimer));
-	solib->time->timers->first->next = NULL;
-	solib->time->timers->new = timer_list_add;
-	solib->time->timers->reset = timer_reset;
-	solib->time->timers->clear = timer_list_clear;
+	t_sotimers_list	*list;
+
+	list = solib->malloc(solib, sizeof(t_sotimers_list));
+	list->first = solib->malloc(solib, sizeof(t_sotimer));
+	list->first->next = NULL;
+	list->new = timer_list_add;
+	list->reset = timer_reset;
+	list->clear = timer_list_clear;
+	return (list);
 }
 
-void	sotime_update_timer(t_solib *solib, t_sotimer *timer, int passed)
+void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed)
 {
 	if (!timer)
 		return ;
 	if (timer->start)
 	{
-		timer->start_millis = solib->time->get_millis();
+		timer->start_millis = loop->get_millis();
 		timer->millis = 0;
 		timer->working = 1;
 		timer->start = 0;
@@ -87,5 +86,5 @@ void	sotime_update_timer(t_solib *solib, t_sotimer *timer, int passed)
 		timer->working = 0;
 		timer->finish = 1;
 	}
-	timer->millis = solib->time->get_millis() - timer->start_millis;
+	timer->millis = loop->get_millis() - timer->start_millis;
 }

@@ -19,8 +19,14 @@ void	updating_time(t_soloop *loop, int passed)
 
 	if (!loop || !loop->solib || loop->stop)
 		return ;
+	loop->last_time = loop->millis;
 	loop->current = sotime_get_millis();
 	loop->millis = loop->current - loop->starting_time;
+	if (loop->millis - loop->last_time > loop->millis_update)
+	{
+		loop->starting_time += (loop->millis - loop->last_time);
+		loop->millis = loop->current - loop->starting_time;
+	}
 	box = loop->timers->first;
 	while (box->next)
 	{
@@ -29,10 +35,14 @@ void	updating_time(t_soloop *loop, int passed)
 	}
 }
 
-void	sotime_restart_loop(t_soloop *loop)
+void	sotime_restart_loop(t_soloop *loop, long millis)
 {
 	loop->stop = 0;
 	loop->starting_time = sotime_get_millis();
+	loop->current = loop->starting_time;
+	loop->millis = 0;
+	loop->millis_update = millis;
+	loop->last_time = 0;
 }
 
 int	sotime_loop(t_soloop *loop, long millis, void *data, int (*callback)())
@@ -43,7 +53,7 @@ int	sotime_loop(t_soloop *loop, long millis, void *data, int (*callback)())
 
 	if (!loop || !loop->solib)
 		return (1);
-	sotime_restart_loop(loop);
+	sotime_restart_loop(loop, millis);
 	start = -millis;
 	current = millis;
 	passed = 0;

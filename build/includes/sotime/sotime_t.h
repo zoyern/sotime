@@ -50,6 +50,8 @@ typedef struct s_soloop
 	t_sotimers_list	*timers;
 	long			starting_time;
 	long			current;
+	long			last_time;
+	long			millis_update;
 	long			millis;
 	long			(*get_millis)();
 	void			(*update)(t_soloop *loop, int passed);

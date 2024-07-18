@@ -14,19 +14,23 @@
 
 int	my_update(t_soloop *loop, t_data *data, long time)
 {
+	if (data->dying->finish)
+	{
+		loop->stop = 1;
+		return (0);
+	}
 	if (!time)
 	{
 		data->dying->start = 1;
 		data->eat->start = loop->print("%d -- eat\n", time);
 	}
 	if (data->eat->finish)
-		data->think->start = loop->print("%d -- think\n", time);
-	if (data->think->finish)
-		data->sleep->start = loop->print("%d -- sleep\n", time);
+		data->sleep->start = loop->print("%d -- think\n", time);
 	if (data->sleep->finish)
+	{
+		loop->timers->reset(loop, data->dying, 1);
 		data->eat->start = loop->print("%d -- eat\n", time);
-	if (data->dying->finish)
-		loop->stop = 1;
+	}
 	return (0);
 }
 
@@ -37,10 +41,9 @@ int	core(t_solib *solib)
 
 	loop = solib->time->loop(solib);
 	data = solib->malloc(solib, sizeof(t_data));
-	data->eat = loop->timers->new(loop, 0, 200);
-	data->think = loop->timers->new(loop, 0, 200);
-	data->sleep = loop->timers->new(loop, 0, 600);
-	data->dying = loop->timers->new(loop, 0, 10000);
+	data->eat = loop->timers->new(loop, 0, 400);
+	data->sleep = loop->timers->new(loop, 0, 400);
+	data->dying = loop->timers->new(loop, 0, 800);
 	solib->time->start(loop, 1, data, my_update);
 	return (0);
 }

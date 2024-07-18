@@ -32,7 +32,7 @@ t_sotimer	*timer_list_add(t_soloop *loop, int start, long millis)
 
 void	timer_reset(t_soloop *loop, t_sotimer *timer, int start)
 {
-	timer->start_millis = loop->millis;
+	timer->start_millis = 0;
 	timer->millis = 0;
 	timer->working = 0;
 	timer->start = start;

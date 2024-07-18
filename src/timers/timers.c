@@ -12,6 +12,7 @@
 
 #include <sotime/all.h>
 #include <sotypes/somemory.h>
+#include <stdio.h>
 
 t_sotimer	*timer_list_add(t_soloop *loop, int start, long millis)
 {
@@ -29,12 +30,12 @@ t_sotimer	*timer_list_add(t_soloop *loop, int start, long millis)
 	return (timer);
 }
 
-void	timer_reset(t_sotimer *timer, int start)
+void	timer_reset(t_soloop *loop, t_sotimer *timer, int start)
 {
-	timer->start = start;
+	timer->start_millis = loop->millis;
 	timer->millis = 0;
-	timer->start_millis = 0;
 	timer->working = 0;
+	timer->start = start;
 	timer->finish = 0;
 }
 
@@ -75,7 +76,7 @@ void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed)
 		return ;
 	if (timer->start)
 	{
-		timer->start_millis = loop->get_millis();
+		timer->start_millis = loop->millis;
 		timer->millis = 0;
 		timer->working = 1;
 		timer->start = 0;
@@ -87,5 +88,5 @@ void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed)
 		timer->working = 0;
 		timer->finish = 1;
 	}
-	timer->millis = loop->get_millis() - timer->start_millis;
+	timer->millis = loop->millis - timer->start_millis;
 }

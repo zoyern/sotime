@@ -19,14 +19,14 @@ void	updating_time(t_soloop *loop, int passed)
 
 	if (!loop || !loop->solib || loop->stop)
 		return ;
+	loop->current = sotime_get_millis();
+	loop->millis = loop->current - loop->starting_time;
 	box = loop->timers->first;
 	while (box->next)
 	{
 		sotime_update_timer(loop, box, passed);
 		box = box->next;
 	}
-	loop->current = sotime_get_millis();
-	loop->millis = loop->current - loop->starting_time;
 }
 
 void	sotime_restart_loop(t_soloop *loop)

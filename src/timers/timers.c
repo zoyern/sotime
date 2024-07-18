@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include <sotime/all.h>
+#include <sotypes/somemory.h>
 
 t_sotimer	*timer_list_add(t_soloop *loop, int start, long millis)
 {
 	t_sotimer	*timer;
 
-	timer = loop->solib->malloc(loop->solib, sizeof(t_sotimer));
+	timer = somalloc(loop->solib, sizeof(t_sotimer));
 	timer->start = start;
 	timer->millis = 0;
 	timer->start_millis = 0;
@@ -48,10 +49,10 @@ void	timer_list_clear(t_soloop *loop)
 	while (box)
 	{
 		tmp = box->next;
-		loop->solib->free(loop->solib, box);
+		sofree(loop->solib, box);
 		box = tmp;
 	}
-	loop->solib->free(loop->solib, loop->timers);
+	sofree(loop->solib, loop->timers);
 	loop->timers = NULL;
 }
 
@@ -59,8 +60,8 @@ t_sotimers_list	*sonew_timers_list(t_solib *solib)
 {
 	t_sotimers_list	*list;
 
-	list = solib->malloc(solib, sizeof(t_sotimers_list));
-	list->first = solib->malloc(solib, sizeof(t_sotimer));
+	list = somalloc(solib, sizeof(t_sotimers_list));
+	list->first = somalloc(solib, sizeof(t_sotimer));
 	list->first->next = NULL;
 	list->new = timer_list_add;
 	list->reset = timer_reset;

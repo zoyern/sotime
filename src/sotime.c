@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include <sotime/all.h>
+#include <sotypes/somemory.h>
+#include <sotypes/soprintf.h>
 
 int	sotime_close(t_solib *solib, int status)
 {
@@ -30,7 +32,7 @@ t_soloop	*soloop_init(t_solib *solib)
 {
 	t_soloop	*loop;
 
-	loop = (t_soloop *)solib->malloc(solib, sizeof(t_soloop));
+	loop = (t_soloop *)somalloc(solib, sizeof(t_soloop));
 	loop->solib = solib;
 	loop->starting_time = 0;
 	loop->millis = 0;
@@ -39,7 +41,7 @@ t_soloop	*soloop_init(t_solib *solib)
 	loop->current = 0;
 	loop->get_millis = sotime_get_millis;
 	loop->update = updating_time;
-	loop->print = solib->print;
+	loop->print = soprintf;
 	return (loop);
 }
 
@@ -60,7 +62,7 @@ t_solib	*sonew_time(t_solib *solib)
 		solib = sonew_libft(solib);
 	if (!solib->libft)
 		solib->close(solib, EXIT_FAILURE);
-	sotime = (t_sotime *)solib->malloc(solib, sizeof(t_sotime));
+	sotime = (t_sotime *)somalloc(solib, sizeof(t_sotime));
 	sotime_init(sotime);
 	solib->time = sotime;
 	return (solib);

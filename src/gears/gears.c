@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <sotime/all.h>
+#include <stdio.h>
 
 void	updating_time(t_soloop *loop, int passed)
 {

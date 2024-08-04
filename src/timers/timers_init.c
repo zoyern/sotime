@@ -49,39 +49,19 @@ t_sotimers_list	*sonew_timers_list(t_solib *solib)
 	return (list);
 }
 
-int	parse_timers(char *str, long info[2])
-{
-	char	**dup;
-
-	if (!str)
-		return (0);
-	dup = ft_split(NULL, str, ':');
-	info[0] = ft_atoi(dup[0]);
-	if (!dup[1])
-		info[1] = 0;
-	else
-		info[1] = ft_atoi(dup[1]);
-	return (0);
-}
-
 t_sotimer	**create_timers(t_solib *solib, t_soloop *loop, char **strs)
 {
 	t_sotimer	**timers;
-	int			i;
-	long		info[2];
+	int			i;	
 
 	i = 0;
 	while (strs[i])
 		i++;
-	timers = somalloc(solib, sizeof(t_sotimer *) * (i + 1));
+	timers = solib->malloc(solib, sizeof(t_sotimer *) * (i + 1));
 	i = 0;
 	while (strs[i])
 	{
-		parse_timers(strs[i], info);
-		if (i < 2)
-			timers[i] = timer_list_add(loop, info[1], info[0]);
-		else
-			timers[i] = timer_list_add(loop, info[1], info[0]);
+		timers[i] = loop->timers->new(loop, 0, ft_atoi(strs[i]));
 		i++;
 	}
 	timers[i] = NULL;

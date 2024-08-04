@@ -13,7 +13,7 @@
 TIMERS_DIR		=	timers
 
 TIMERS_HEADER	=	timers.h
-TIMERS_FILE		=	timers.c
+TIMERS_FILE		=	timers.c timers_init.c
 
 TIMERS			=	$(addprefix $(TIMERS_DIR)/, $(TIMERS_FILE))
 TIMERS_HEAD		=	$(addprefix $(TIMERS_DIR)/, $(TIMERS_HEADER))

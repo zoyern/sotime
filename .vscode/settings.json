@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"all.h": "c",
-		"somemory.h": "c"
+		"somemory.h": "c",
+		"sostdlib.h": "c"
 	}
 }

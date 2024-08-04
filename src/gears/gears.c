@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include <sotime/all.h>
-#include <stdio.h>
 
 void	updating_time(t_soloop *loop, int passed)
 {
@@ -80,16 +79,4 @@ long	sotime_get_millis(void)
 
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-t_sotimer	sotime_timer_init(int start)
-{
-	t_sotimer	timer;
-
-	timer.start = start;
-	timer.millis = 0;
-	timer.start_millis = 0;
-	timer.working = 0;
-	timer.finish = 0;
-	return (timer);
 }

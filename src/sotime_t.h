@@ -54,6 +54,8 @@ typedef struct s_soloop
 	long			millis_update;
 	long			millis;
 	long			(*get_millis)();
+	t_sotimer		**(*create_timers)(t_solib *solib, t_soloop *loop,
+			char **strs);
 	void			(*update)(t_soloop *loop, int passed);
 	int				(*print)(const char *str, ...);
 }	t_soloop;

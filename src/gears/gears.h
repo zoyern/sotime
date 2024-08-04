@@ -19,8 +19,8 @@ int			sotime_loop(t_soloop *loop, long millis,
 				void *data, int (*callback)());
 long		sotime_get_millis(void);
 void		updating_time(t_soloop *loop, int passed);
-t_sotimer	sotime_timer_init(int start);
 t_soloop	*soloop_init(t_solib *solib);
 void		sotime_restart_loop(t_soloop *loop, long millis);
+t_sotimer	**create_timers(t_solib *solib, t_soloop *loop, char **strs);
 
 #endif

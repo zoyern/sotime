@@ -11,11 +11,13 @@
 /* ************************************************************************** */
 
 #include "exemple.h"
+#include <solibft/sostring.h>
 
 int	my_update(t_soloop *loop, t_data *data, long time)
 {
 	if (data->dying->finish)
 	{
+		loop->print("%d -- die\n", time);
 		loop->stop = 1;
 		return (0);
 	}
@@ -25,7 +27,11 @@ int	my_update(t_soloop *loop, t_data *data, long time)
 		data->eat->start = loop->print("%d -- eat\n", time);
 	}
 	if (data->eat->finish)
-		data->sleep->start = loop->print("%d -- think\n", time);
+		data->timers[0]->start = loop->print("%d -- think\n", time);
+	if (data->timers[0]->finish)
+		data->timers[1]->start = loop->print("%d -- drink\n", time);
+	if (data->timers[1]->finish)
+		data->sleep->start = loop->print("%d -- sleep\n", time);
 	if (data->sleep->finish)
 	{
 		loop->timers->reset(loop, data->dying, 1);
@@ -43,7 +49,9 @@ int	core(t_solib *solib)
 	data = solib->malloc(solib, sizeof(t_data));
 	data->eat = loop->timers->new(loop, 0, 400);
 	data->sleep = loop->timers->new(loop, 0, 400);
-	data->dying = loop->timers->new(loop, 0, 800);
+	data->timers = loop->create_timers(solib, loop,
+			ft_split(solib, "400,400", ','));
+	data->dying = loop->timers->new(loop, 0, 1600);
 	solib->time->start(loop, 1, data, my_update);
 	return (0);
 }

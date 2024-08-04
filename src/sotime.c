@@ -39,6 +39,7 @@ t_soloop	*soloop_init(t_solib *solib)
 	loop->stop = 0;
 	loop->timers = sonew_timers_list(solib);
 	loop->current = 0;
+	loop->create_timers = create_timers;
 	loop->get_millis = sotime_get_millis;
 	loop->update = updating_time;
 	loop->print = soprintf;

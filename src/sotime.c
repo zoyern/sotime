@@ -34,11 +34,13 @@ t_soloop	*soloop_init(t_solib *solib)
 
 	loop = (t_soloop *)somalloc(solib, sizeof(t_soloop));
 	loop->solib = solib;
-	loop->starting_time = 0;
+	loop->starting_time = sotime_get_millis();
 	loop->millis = 0;
 	loop->stop = 0;
+	loop->millis_update = 0;
+	loop->last_time = 0;
 	loop->timers = sonew_timers_list(solib);
-	loop->current = 0;
+	loop->current = loop->starting_time;
 	loop->create_timers = create_timers;
 	loop->get_millis = sotime_get_millis;
 	loop->update = updating_time;

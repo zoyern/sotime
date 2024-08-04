@@ -53,7 +53,7 @@ int	sotime_loop(t_soloop *loop, long millis, void *data, int (*callback)())
 
 	if (!loop || !loop->solib)
 		return (1);
-	sotime_restart_loop(loop, millis);
+	loop->millis_update = millis;
 	start = -millis;
 	current = millis;
 	passed = 0;
@@ -64,7 +64,7 @@ int	sotime_loop(t_soloop *loop, long millis, void *data, int (*callback)())
 		{
 			passed = 1;
 			if (callback)
-				if (callback(loop, data, loop->millis))
+				if (callback(loop, data))
 					return (1);
 			start = loop->millis;
 		}

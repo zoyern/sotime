@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/05 01:57:56 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/11 03:28:21 by marvin           ###   ########.fr       */
+/*   Updated: 2024/08/04 18:23:48 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include <sotypes/all.h>
 
-int		soprintf(const char *str, ...);
 void	soprintf_select(va_list list_arg, const char **str, size_t *len);
 size_t	soprint_strlen(const char *str);
 void	soprintf_putcolor_len(const char **s, va_list list_arg,

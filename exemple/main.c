@@ -13,29 +13,29 @@
 #include "exemple.h"
 #include <solibft/sostring.h>
 
-int	my_update(t_soloop *loop, t_data *data, long time)
+int	my_update(t_soloop *loop, t_data *data)
 {
 	if (data->dying->finish)
 	{
-		loop->print("%d -- die\n", time);
+		loop->print("%d -- die\n", loop->millis);
 		loop->stop = 1;
 		return (0);
 	}
-	if (!time)
+	if (!loop->millis)
 	{
 		data->dying->start = 1;
-		data->eat->start = loop->print("%d -- eat\n", time);
+		data->eat->start = loop->print("%d -- eat\n", loop->millis);
 	}
 	if (data->eat->finish)
-		data->timers[0]->start = loop->print("%d -- think\n", time);
+		data->timers[0]->start = loop->print("%d -- think\n", loop->millis);
 	if (data->timers[0]->finish)
-		data->timers[1]->start = loop->print("%d -- drink\n", time);
+		data->timers[1]->start = loop->print("%d -- drink\n", loop->millis);
 	if (data->timers[1]->finish)
-		data->sleep->start = loop->print("%d -- sleep\n", time);
+		data->sleep->start = loop->print("%d -- sleep\n", loop->millis);
 	if (data->sleep->finish)
 	{
 		loop->timers->reset(loop, data->dying, 1);
-		data->eat->start = loop->print("%d -- eat\n", time);
+		data->eat->start = loop->print("%d -- eat\n", loop->millis);
 	}
 	return (0);
 }

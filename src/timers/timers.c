@@ -13,9 +13,17 @@
 #include <sotime/all.h>
 #include <sotypes/somemory.h>
 
+
+
+
 void	timer_reset(t_soloop *loop, t_sotimer *timer)
 {
-	timer->start_millis = loop->millis + (loop->millis - loop->last_time);
+	long	current;
+	long	millis;
+
+	current = sotime_get_millis();
+	millis = current - loop->starting_time;
+	timer->start_millis = millis;
 	timer->millis = 0;
 	timer->working = 1;
 	timer->start = 0;

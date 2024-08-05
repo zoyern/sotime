@@ -26,6 +26,7 @@ void	updating_time(t_soloop *loop, int passed)
 	deleyed = loop->millis - loop->last_time;
 	if (loop->millis - loop->last_time > loop->millis_update)
 	{
+		soprintf("%d\n", deleyed);
 		loop->starting_time += deleyed;
 		loop->millis = loop->current - loop->starting_time;
 	}

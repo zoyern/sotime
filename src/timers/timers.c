@@ -13,14 +13,12 @@
 #include <sotime/all.h>
 #include <sotypes/somemory.h>
 
-void	timer_reset(t_soloop *loop, t_sotimer *timer, int start)
+void	timer_reset(t_soloop *loop, t_sotimer *timer)
 {
-	(void)loop;
-	timer->start_millis = 0;
+	timer->start_millis = loop->millis;
 	timer->millis = 0;
-	timer->working = 0;
-	timer->start = start;
-	timer->finish = 0;
+	timer->working = 1;
+	timer->start = 0;
 }
 
 void	timer_list_clear(t_soloop *loop)

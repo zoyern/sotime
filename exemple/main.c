@@ -34,7 +34,7 @@ int	my_update(t_soloop *loop, t_data *data)
 		data->sleep->start = loop->print("%d -- sleep\n", loop->millis);
 	if (data->sleep->finish)
 	{
-		loop->timers->reset(loop, data->dying, 1);
+		loop->reset(loop, data->dying);
 		data->eat->start = loop->print("%d -- eat\n", loop->millis);
 	}
 	return (0);

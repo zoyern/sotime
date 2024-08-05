@@ -39,7 +39,6 @@ typedef struct s_sotimers_list
 {
 	t_sotimer	*first;
 	t_sotimer	*(*new)(t_soloop *loop, int start, long millis);
-	void		(*reset)(t_soloop *loop, t_sotimer *timer, int start);
 	void		(*clear)(t_soloop *loop);
 }	t_sotimers_list;
 
@@ -58,6 +57,7 @@ typedef struct s_soloop
 			char **strs);
 	void			(*update)(t_soloop *loop, int passed);
 	int				(*print)(const char *str, ...);
+	void			(*reset)(t_soloop *loop, t_sotimer *timer);
 }	t_soloop;
 
 typedef struct s_sotime

@@ -20,7 +20,7 @@ t_sotimer		*timer_list_add(t_soloop *loop, int start, long millis);
 void			timer_list_clear(t_soloop *loop);
 void	sotime_update_timer(t_soloop *loop, t_sotimer *timer,
 					int passed, int deleyed);
-void			timer_reset(t_soloop *loop, t_sotimer *timer, int start);
+void			timer_reset(t_soloop *loop, t_sotimer *timer);
 t_sotimer		**create_timers(t_solib *solib, t_soloop *loop, char **strs);
 
 #endif

@@ -44,7 +44,6 @@ t_sotimers_list	*sonew_timers_list(t_solib *solib)
 	list->first = somalloc(solib, sizeof(t_sotimer));
 	list->first->next = NULL;
 	list->new = timer_list_add;
-	list->reset = timer_reset;
 	list->clear = timer_list_clear;
 	return (list);
 }

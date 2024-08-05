@@ -15,7 +15,7 @@
 
 void	timer_reset(t_soloop *loop, t_sotimer *timer)
 {
-	timer->start_millis = loop->millis;
+	timer->start_millis = loop->millis + (loop->millis - loop->last_time);
 	timer->millis = 0;
 	timer->working = 1;
 	timer->start = 0;

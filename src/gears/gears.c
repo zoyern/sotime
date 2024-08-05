@@ -19,6 +19,12 @@ void	updating_time(t_soloop *loop, int passed)
 
 	if (!loop || !loop->solib || loop->stop)
 		return ;
+	box = loop->timers->first;
+	while (box->next)
+	{
+		sotime_update_timer(loop, box, passed);
+		box = box->next;
+	}
 	loop->last_time = loop->millis;
 	loop->current = sotime_get_millis();
 	loop->millis = loop->current - loop->starting_time;
@@ -26,12 +32,6 @@ void	updating_time(t_soloop *loop, int passed)
 	{
 		loop->starting_time += (loop->millis - loop->last_time);
 		loop->millis = loop->current - loop->starting_time;
-	}
-	box = loop->timers->first;
-	while (box->next)
-	{
-		sotime_update_timer(loop, box, passed);
-		box = box->next;
 	}
 }
 

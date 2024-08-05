@@ -47,7 +47,7 @@ void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed)
 		return ;
 	if (timer->start)
 	{
-		timer->start_millis = loop->millis;
+		timer->start_millis = loop->millis - loop->millis_update;
 		timer->millis = 0;
 		timer->working = 1;
 		timer->start = 0;

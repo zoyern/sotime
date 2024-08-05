@@ -41,9 +41,8 @@ void	timer_list_clear(t_soloop *loop)
 	loop->timers = NULL;
 }
 
-void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed, int deleyed)
+void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed)
 {
-	(void)deleyed;
 	if (!timer)
 		return ;
 	if (timer->start)

@@ -47,11 +47,11 @@ int	core(t_solib *solib)
 
 	loop = solib->time->loop(solib);
 	data = solib->malloc(solib, sizeof(t_data));
-	data->eat = loop->timers->new(loop, 0, 400);
-	data->sleep = loop->timers->new(loop, 0, 400);
+	data->eat = loop->timers->new(loop, 0, 1000);
+	data->sleep = loop->timers->new(loop, 0, 1000);
 	data->timers = loop->create_timers(solib, loop,
-			ft_split(solib, "400,400", ','));
-	data->dying = loop->timers->new(loop, 0, 1600);
+			ft_split(solib, "1000,1000", ','));
+	data->dying = loop->timers->new(loop, 0, 4000);
 	solib->time->start(loop, 1, data, my_update);
 	return (0);
 }

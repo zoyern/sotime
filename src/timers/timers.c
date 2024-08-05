@@ -41,13 +41,13 @@ void	timer_list_clear(t_soloop *loop)
 	loop->timers = NULL;
 }
 
-void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed)
+void	sotime_update_timer(t_soloop *loop, t_sotimer *timer, int passed, int deleyed)
 {
 	if (!timer)
 		return ;
 	if (timer->start)
 	{
-		timer->start_millis = loop->millis - loop->millis_update;
+		timer->start_millis = loop->millis - deleyed;
 		timer->millis = 0;
 		timer->working = 1;
 		timer->start = 0;
